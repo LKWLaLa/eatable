@@ -9,6 +9,7 @@ class Eatable::CLI
 
   def call
     self.greeting
+    self.menu
   end
 
   def greeting
@@ -20,7 +21,11 @@ class Eatable::CLI
   end
 
   def menu
-    
+    puts "\nPlease type the number of the area you would like to search."
+    print "=> "
+    input = gets.strip.to_i
+    puts AREAS.sort[input - 1]
+    puts AREAS.sort[0]
   end
 
   
