@@ -25,9 +25,25 @@ class Eatable::CLI
     print "=> "
     input = gets.strip.to_i
     puts AREAS.sort[input - 1]
-    puts AREAS.sort[0]
+  end
+
+  def city_link
+  end
+
+  def neighborhood_link
+  end
+
+  def restaurant_link
   end
 
   
 
 end
+
+
+
+
+
+
+
+
