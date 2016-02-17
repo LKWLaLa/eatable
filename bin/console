@@ -14,15 +14,78 @@ Pry.start
 require "irb"
 IRB.start
 
-  def scrape(city_name)
-    city_url = 'http://' + city_name + '.menupages.com/'
-    citypg = Nokogiri::HTML(open(city_url))
+  class Eatable::CLI
 
-    citypg.css('#image-map area'). each do |a|
-      neighborhood_url = a.attr('href')
-      puts neighborhood_url
-    end
+  AREAS = ["New York", "San Francisco", "Los Angeles", "Philadelphia", "Boston", 
+    "Chicago", "Washington, DC", "South Florida"]
+
+    attr_accessor :a_input, :n_input, :neighborhoods, :city_name
+
+
+
+  def call
+    self.greeting
+    self.select_area
+    self.select_neighborhood
+  binding.pry
+    self.link
+  end
+
+  def greeting
+    puts "_" * 70, "\n"
+    puts "Hi there, welcome to Eatable!  \u{1f370} \u{1f374}"
+    puts "Restaurants can currently be screened in the following areas:"
+    puts "_" * 70
+    AREAS.sort.each_with_index {|a, i| puts "#{i + 1}. #{a}" }    
+  end
+
+  def select_area
+    puts "\nWhich area would you like to search? (Please type the number.)"
+    print "=> "
+    self.a_input = gets.strip.to_i
+    puts "\nOk! Let's check #{AREAS.sort[self.a_input - 1]}..."
+    puts "_" * 70, "\n"
   end
 
 
-  scrape_citypage('www')
+  def city_name=
+    @city_name = (AREAS.sort[self.a_input - 1]).downcase.gsub(/\s|,/, "")
+    if @city_name == "newyork"
+      @city_name = "www"
+    end
+  end
+
+  def neighborhoods=
+    @neighborhoods = Eatable::Scraper.neighborhood_scrape(@city_name)
+  end
+
+
+  def select_neighborhood
+    puts "Available neighborhoods:"
+    puts "-" * 24
+    #city_name = (AREAS.sort[self.a_input - 1]).downcase.gsub(/\s|,/, "")
+    #if city_name == "newyork"
+      #city_name = "www"
+    #end
+    #self.neighborhoods=(self.city_name)
+    self.neighborhoods.each_with_index {|(k,v), i| puts "#{i + 1}. #{k}"}
+    puts "\nWhere are you thinking of eating? (select the neighborhood number)"
+    print "=> "
+    self.n_input = gets.strip.to_i
+    k = self.neighborhoods.keys
+    puts "\nOk! Screening #{k[self.n_input - 1]} restaurant menus..."
+    puts "_" * 70, "\n"
+  end
+
+
+
+  def list_restaurants
+    k = self.neighborhoods.keys
+    puts self.neighborhoods[k[self.n_input - 1]]
+  end
+
+  
+
+end
+
+Eatable::CLI.new.call

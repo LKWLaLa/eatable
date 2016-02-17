@@ -7,8 +7,8 @@ class Eatable::Scraper
 
   def self.neighborhood_scrape(city_name)
     neighborhoods = {}
-    city_url = 'http://' + city_name + '.menupages.com/'
-    citypg = Nokogiri::HTML(open(city_url))
+    @@city_url = 'http://' + city_name + '.menupages.com/'
+    citypg = Nokogiri::HTML(open(@@city_url))
 
     citypg.css('#image-map area').each do |a|
       neighborhood_url = a.attr('href')
@@ -17,6 +17,43 @@ class Eatable::Scraper
     end
     neighborhoods
   end
+
+  def self.restaurant_scrape(neighborhood_url)
+    valid_restaurants = {}
+    menus_array = []
+
+    self.full_neighborhood_url=(neighborhood_url)
+    neighb_pg = Nokogiri::HTML(open(self.full_neighborhood_url))
+    rest_table = neighb_pg.css('tbody tr td a')
+    rest_table.each do|listing| 
+      menus_array << listing.attr('href') unless (listing.attr('href')).include?('grubhub'||'seamless')
+    end
+    menus_array
+    #refactor to find correct css attr, so I don't need to filter for grubhub and seamless
+  end
+
+
+  def self.filter_menus(menus_array)
+  end
+
+
+
+  def self.city_url
+    @@city_url
+  end
+
+  def self.full_neighborhood_url=(neighborhood_url)
+    if @@city_url == "http://www.menupages.com/"
+      @@full_neighborhood_url = neighborhood_url
+    else
+      @@full_neighborhood_url = @@city_url + neighborhood_url
+    end
+  end
+
+  def self.full_neighborhood_url
+    @@full_neighborhood_url
+  end
+
   
 
 
