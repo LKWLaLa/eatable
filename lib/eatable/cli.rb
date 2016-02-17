@@ -3,7 +3,7 @@ class Eatable::CLI
   AREAS = ["New York", "San Francisco", "Los Angeles", "Philadelphia", "Boston", 
     "Chicago", "Washington, DC", "South Florida"]
 
-    attr_accessor :a_input, :n_input
+    attr_accessor :a_input, :n_input, :neighborhoods
 
 
 
@@ -30,6 +30,11 @@ class Eatable::CLI
   end
 
 
+  def neighborhoods=(city_name)
+    @neighborhoods = Eatable::Scraper.neighborhood_scrape(city_name)
+  end
+
+
   def select_neighborhood
     puts "Available neighborhoods:"
     puts "-" * 24
@@ -37,16 +42,17 @@ class Eatable::CLI
     if city_name == "newyork"
       city_name = "www"
     end
-    neighborhoods = Eatable::Scraper.neighborhood_scrape(city_name)
-    neighborhoods.each_with_index {|(k,v), i| puts "#{i + 1}. #{k}"}
+    self.neighborhoods=(city_name)
+    self.neighborhoods.each_with_index {|(k,v), i| puts "#{i + 1}. #{k}"}
     puts "\nWhere are you thinking of eating? (select the neighborhood number)"
     print "=> "
     self.n_input = gets.strip.to_i
-    k = neighborhoods.keys
+    k = self.neighborhoods.keys
     puts "\nOk! Screening #{k[self.n_input - 1]} restaurant menus..."
     puts "_" * 70, "\n"
-    puts neighborhoods[k[self.n_input - 1]]
+    puts self.neighborhoods[k[self.n_input - 1]]
   end
+
 
 
   def restaurant_link
