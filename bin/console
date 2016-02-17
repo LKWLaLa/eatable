@@ -13,3 +13,16 @@ Pry.start
 
 require "irb"
 IRB.start
+
+  def scrape(city_name)
+    city_url = 'http://' + city_name + '.menupages.com/'
+    citypg = Nokogiri::HTML(open(city_url))
+
+    citypg.css('#image-map area'). each do |a|
+      neighborhood_url = a.attr('href')
+      puts neighborhood_url
+    end
+  end
+
+
+  scrape_citypage('www')

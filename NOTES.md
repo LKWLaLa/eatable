@@ -14,3 +14,6 @@ http://washingtondc.menupages.com/
 
 http://southflorida.menupages.com/
 
+citypg.css('#image-map area').first.attr('href')
+
+
