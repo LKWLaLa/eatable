@@ -5,12 +5,12 @@ require 'pry'
 class Eatable::Scraper
   
 
-  def neighborhood_scrape(city_name)
+  def self.neighborhood_scrape(city_name)
     neighborhoods = {}
     city_url = 'http://' + city_name + '.menupages.com/'
     citypg = Nokogiri::HTML(open(city_url))
 
-    citypg.css('#image-map area'). each do |a|
+    citypg.css('#image-map area').each do |a|
       neighborhood_url = a.attr('href')
       name = a.attr('alt')
       neighborhoods[name] = neighborhood_url
@@ -19,7 +19,6 @@ class Eatable::Scraper
   end
   
 
-  def 
 
   #iterate through restaurants and follow links to their menues
 
