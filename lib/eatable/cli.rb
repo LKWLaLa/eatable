@@ -25,7 +25,7 @@ class Eatable::CLI
     puts "\nWhich area would you like to search? (Please type the number.)"
     print "=> "
     self.a_input = gets.strip.to_i
-    puts "\nOk!  Let's check #{AREAS.sort[self.a_input - 1]}..."
+    puts "\nOk! Let's check #{AREAS.sort[self.a_input - 1]}..."
     puts "_" * 70, "\n"
   end
 
@@ -37,10 +37,15 @@ class Eatable::CLI
     if city_name == "newyork"
       city_name = "www"
     end
-    (Eatable::Scraper.neighborhood_scrape(city_name)).each_with_index {|(k,v), i| puts "#{i + 1}. #{k}"}
-    puts "\nWhere are you thinking about eating? (select the neighborhood number)"
+    neighborhoods = Eatable::Scraper.neighborhood_scrape(city_name)
+    neighborhoods.each_with_index {|(k,v), i| puts "#{i + 1}. #{k}"}
+    puts "\nWhere are you thinking of eating? (select the neighborhood number)"
     print "=> "
     self.n_input = gets.strip.to_i
+    k = neighborhoods.keys
+    puts "\nOk! Screening #{k[self.n_input - 1]} restaurant menus..."
+    puts "_" * 70, "\n"
+    puts neighborhoods[k[self.n_input - 1]]
   end
 
 
