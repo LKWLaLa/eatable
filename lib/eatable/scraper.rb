@@ -19,21 +19,21 @@ class Eatable::Scraper
   end
 
   def self.restaurant_scrape(neighborhood_url)
-    valid_restaurants = {}
-    menus_array = []
+    menus_link_array = []
 
     self.full_neighborhood_url=(neighborhood_url)
     neighb_pg = Nokogiri::HTML(open(self.full_neighborhood_url))
     rest_table = neighb_pg.css('tbody tr td a')
     rest_table.each do|listing| 
-      menus_array << listing.attr('href') unless (listing.attr('href')).include?('grubhub'||'seamless')
+      menus_link_array << listing.attr('href') unless ((listing.attr('href')).include?('grubhub') || (listing.attr('href')).include?('seamless'))
     end
-    menus_array
+    menus_link_array
     #refactor to find correct css attr, so I don't need to filter for grubhub and seamless
   end
 
 
   def self.filter_menus(menus_array)
+    valid_restaurants = {}
   end
 
 

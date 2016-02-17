@@ -12,7 +12,6 @@ class Eatable::CLI
   def call
     self.greeting
     self.select_area
-    puts self.city_name
     self.select_neighborhood
     self.list_restaurants
   end
@@ -52,6 +51,10 @@ class Eatable::CLI
     puts "_" * 70, "\n"
   end
 
+
+  def list_restaurants
+    puts Eatable::Scraper.restaurant_scrape(self.neighborhood_url)
+  end
 
 
   def neighborhood_url
