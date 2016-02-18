@@ -4,12 +4,6 @@ http://sanfrancisco.menupages.com/
 
 http://losangeles.menupages.com/
 
-http://philadelphia.menupages.com/
-
-http://boston.menupages.com/
-
-http://chicago.menupages.com/
-
 http://washingtondc.menupages.com/
 
 http://southflorida.menupages.com/
@@ -18,6 +12,12 @@ citypg.css('#image-map area').first.attr('href')
 neighb_pg.css('tbody').first
 neighb_pg.css('tbody tr td a').first.attr('href')
 => "/restaurants/zigo/"
+
+Should I refactor to find correct css selector, so I don't need to filter for grubhub and seamless?
+
+In case I want to add zip code:  menupg.css('span.city-zip').text
+
+/\u00A0/  Regex for nbsp characters (to get rid of the weird spaces!!)
 
 
 It occurs to me that having self.input as an instance variable in the CLI class, changing each time might not be a good idea.  It solves the need to call on other methods for return values (which is hard, if you also want to puts something in that method - each method has a separate menu), but if a user wants to go back to choose another something....  would having an instance variable be problematic or helpful?  Maybe I should use a different variable for each selection...

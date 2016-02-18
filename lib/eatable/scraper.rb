@@ -4,9 +4,9 @@ require 'pry'
 
 class Eatable::Scraper
 
-  NUTS = ["coconut", "chestnut", "chestnuts", "hazelnut", "hazelnuts", "pinenut", "pinenuts", "nutella", "walnut", "walnuts", "peanut", "peanuts", "nuts", "nut", "almond", "almonds", "cashew", "cashews", "macadamia", "pecan", "pecans", "pigñolia", "pistachio", "pistachios", "praline", "pralines", "pesto", "filbert", "thai"]
-  SHELL_FISH = []
-  
+  NUTS = ["coconut", "chestnut", "chestnuts", "hazelnut", "hazelnuts", "pinenut", "pinenuts", "nutella", "walnut", "walnuts", "peanut", "peanuts", "nuts", "nut", "almond", "almonds", "cashew", "cashews", "macadamia", "pecan", "pecans", "pigñolia", "pistachio", "pistachios", "praline", "pralines", "pesto", "filberts"]
+  SHELL_FISH = ["shrimp", "shrimps", "clam", "clams", "mussels", "mussel", "lobster", "crab", "prawns"]
+  BOTH = NUTS + SHELL_FISH
 
   def self.neighborhood_scrape(city_name)
     neighborhoods = {}
@@ -21,6 +21,7 @@ class Eatable::Scraper
     neighborhoods
   end
 
+
   def self.restaurant_scrape(neighborhood_url)
     menus_array = []
 
@@ -34,17 +35,16 @@ class Eatable::Scraper
 
     self.filter_menus(menus_array)
   end
-#refactor to find correct css attr, so I don't need to filter for grubhub and seamless
-#menupg.css('span.city-zip').text
+
 
 
   def self.filter_menus(menus_array)
     valid_restaurants = []
 
-    menus_array[0..60].each do |menu|
+    menus_array[0..50].each do |menu|
       menupg = Nokogiri::HTML(open(menu))
       menu_body = (menupg.css('div #restaurant-menu').text.gsub(/\r\n/, "").gsub(/\u00A0/, "").gsub(",", " ").gsub(".", " ")).downcase.split
-      if (menu_body & NUTS).empty? && menu_body.length > 5
+      if (menu_body & BOTH).empty? && menu_body.length > 5
         restaurant = {
           "name" => menupg.css('div h1.title1respage').text,
           "address" => "#{menupg.css('span.addr').text}",
@@ -55,9 +55,7 @@ class Eatable::Scraper
       end
     end
     valid_restaurants
-  end
-
-      
+  end      
 
 
   def self.city_url
@@ -75,16 +73,6 @@ class Eatable::Scraper
   def self.full_neighborhood_url
     @@full_neighborhood_url
   end
-
   
-
-
-
-
-  #return restaurants with 2 or fewer occurances of allergen terms
-
-  #add valid restaurants to hash, and then Restaurant instances out of the hash data
-  
-
   
 end
