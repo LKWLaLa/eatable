@@ -8,7 +8,6 @@ class Eatable::CLI
     attr_accessor :a_input, :n_input, :neighborhoods, :city_name
 
 
-
   def call
     self.greeting
     self.select_area
@@ -31,6 +30,7 @@ class Eatable::CLI
     AREAS.sort.each_with_index {|a, i| puts "#{i + 1}. #{a}" }    
   end
 
+
   def select_area
     puts "\nWhich area would you like to search? (Please type the number, or 0 to quit.)"
     print "=> "    
@@ -41,8 +41,7 @@ class Eatable::CLI
       puts "\nOk! Let's check #{AREAS.sort[self.a_input - 1]}..."
       puts "_" * 85, "\n"
     end
-  end  
-  
+  end    
 
 
   def select_neighborhood

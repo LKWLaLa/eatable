@@ -4,9 +4,9 @@ require 'pry'
 
 class Eatable::Scraper
 
-  NUTS = ["coconut", "chestnut", "chestnuts", "hazelnut", "hazelnuts", "pinenut", "pinenuts", "nutella", "walnut", "walnuts", "peanut", "peanuts", "nuts", "nut", "almond", "almonds", "cashew", "cashews", "macadamia", "pecan", "pecans", "pigñolia", "pistachio", "pistachios", "praline", "pralines", "pesto", "filberts"]
-  SHELL_FISH = ["shrimp", "shrimps", "clam", "clams", "mussels", "mussel", "lobster", "crab", "prawns"]
-  BOTH = NUTS + SHELL_FISH
+  NUTS = /nut|almond|cashew|macadamia|pecan|pigñolia|pistachio|praline|pesto|filbert/
+  SHELL_FISH = /shrimp|clam|mussel|lobster|crab|prawn/
+  
 
   def self.neighborhood_scrape(city_name)
     neighborhoods = {}
@@ -41,10 +41,11 @@ class Eatable::Scraper
   def self.filter_menus(menus_array)
     valid_restaurants = []
 
-    menus_array[0..50].each do |menu|
+    menus_array[0..10].each do |menu|
       menupg = Nokogiri::HTML(open(menu))
-      menu_body = (menupg.css('div #restaurant-menu').text.gsub(/\r\n/, "").gsub(/\u00A0/, "").gsub(",", " ").gsub(".", " ")).downcase.split
-      if (menu_body & BOTH).empty? && menu_body.length > 5
+      menu_body = (menupg.css('div #restaurant-menu').text.gsub(/\r\n/, "").gsub(/\u00A0/, "")).downcase
+      # --------------- Adjust tolerence level for number of search terms -----------------------------
+      if (menu_body.scan(NUTS).length <= 2) && (menu_body.scan(SHELL_FISH).length <= 2) && (menu_body.length > 20)
         restaurant = {
           "name" => menupg.css('div h1.title1respage').text,
           "address" => "#{menupg.css('span.addr').text}",
