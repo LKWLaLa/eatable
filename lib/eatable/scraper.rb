@@ -35,7 +35,7 @@ class Eatable::Scraper
     self.filter_menus(menus_array)
   end
 #refactor to find correct css attr, so I don't need to filter for grubhub and seamless
-
+#menupg.css('span.city-zip').text
 
 
   def self.filter_menus(menus_array)
@@ -47,7 +47,7 @@ class Eatable::Scraper
       if (menu_body & NUTS).empty? && menu_body.length > 5
         restaurant = {
           "name" => menupg.css('div h1.title1respage').text,
-          "address" => "#{menupg.css('span.addr').text} #{menupg.css('span.city-zip').text}",
+          "address" => "#{menupg.css('span.addr').text}",
           "phone" => menupg.css('li.phonenew').text.gsub(/[\\rn\s]/, "")
           }
 

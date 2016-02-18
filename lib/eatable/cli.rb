@@ -16,20 +16,31 @@ class Eatable::CLI
     self.list_restaurants
   end
 
+  def quit
+    puts "-" * 24
+    puts "\nSee you later!"
+    exit(0)
+  end
+
+
   def greeting
-    puts "_" * 70, "\n"
+    puts "_" * 85, "\n"
     puts "Hi there, welcome to Eatable!  \u{1f370} \u{1f374}"
     puts "Restaurants can currently be screened in the following areas:"
-    puts "_" * 70
+    puts "_" * 85, "\n"
     AREAS.sort.each_with_index {|a, i| puts "#{i + 1}. #{a}" }    
   end
 
   def select_area
-    puts "\nWhich area would you like to search? (Please type the number.)"
-    print "=> "
+    puts "\nWhich area would you like to search? (Please type the number, or 0 to quit.)"
+    print "=> "    
     self.a_input = gets.strip.to_i
-    puts "\nOk! Let's check #{AREAS.sort[self.a_input - 1]}..."
-    puts "_" * 70, "\n"
+    if self.a_input == 0
+      self.quit
+    else
+      puts "\nOk! Let's check #{AREAS.sort[self.a_input - 1]}..."
+      puts "_" * 85, "\n"
+    end
   end  
   
 
@@ -43,12 +54,16 @@ class Eatable::CLI
     end
     @neighborhoods = Eatable::Scraper.neighborhood_scrape(@city_name)
     self.neighborhoods.each_with_index {|(k,v), i| puts "#{i + 1}. #{k}"}
-    puts "\nWhere are you thinking of eating? (select the neighborhood number)"
+    puts "\nWhere are you thinking of eating? (select the neighborhood number, or 0 to quit)"
     print "=> "
     self.n_input = gets.strip.to_i
-    k = self.neighborhoods.keys
-    puts "\nOk! Screening #{k[self.n_input - 1]} restaurant menus...   (This may take a few minutes)..."
-    puts "_" * 85, "\n"
+    if self.n_input == 0
+      self.quit
+    else
+      k = self.neighborhoods.keys
+      puts "\nOk! Screening #{k[self.n_input - 1]} restaurant menus... This may take a few minutes..."
+      puts "_" * 90, "\n"
+    end
   end
 
 
@@ -57,8 +72,17 @@ class Eatable::CLI
     puts "Here are some potential options!"
     puts "-" * 31
     valid_restaurants.each do |restaurant|
-      puts "\n#{restaurant["name"]}\n\t#{restaurant["address"]}\n\t#{restaurant["phone"]}"
+      puts "\n #{restaurant["name"]}\n   #{restaurant["address"]}\n   #{restaurant["phone"]}"
     end
+    puts "_" * 85 
+    puts "\nWould you like to search another area? (Y/n)?"
+    print "=> "
+    input = gets.strip.downcase
+      if input == 'y'
+        self.call
+      else
+        quit
+      end
   end
 
 
