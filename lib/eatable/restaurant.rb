@@ -1,6 +1,6 @@
 class Eatable::Restaurant
 
-  @@all
+  @@all = []
 
   attr_accessor :name, :address, :phone, :website, :menu
 
