@@ -18,7 +18,7 @@ class Eatable::CLI
 
   def quit
     puts "-" * 24
-    puts "\nSee you later!"
+    puts "\nSee you later! \u{2615}"
     exit(0)
   end
 
