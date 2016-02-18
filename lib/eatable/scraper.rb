@@ -32,30 +32,32 @@ class Eatable::Scraper
     end
     menus_array.map! {|link| self.city_url + link + "menu"}
 
-    puts self.filter_menus(menus_array)
-
-    #refactor to find correct css attr, so I don't need to filter for grubhub and seamless
+    self.filter_menus(menus_array)
   end
+#refactor to find correct css attr, so I don't need to filter for grubhub and seamless
+
 
 
   def self.filter_menus(menus_array)
     valid_restaurants = []
 
-    menus_array[0..100].each do |menu|
+    menus_array[0..60].each do |menu|
       menupg = Nokogiri::HTML(open(menu))
       menu_body = (menupg.css('div #restaurant-menu').text.gsub(/\r\n/, "").gsub(/\u00A0/, "").gsub(",", " ").gsub(".", " ")).downcase.split
       if (menu_body & NUTS).empty? && menu_body.length > 5
-        valid_restaurants << menupg.css('div h1.title1respage').text
+        restaurant = {
+          "name" => menupg.css('div h1.title1respage').text,
+          "address" => "#{menupg.css('span.addr').text} #{menupg.css('span.city-zip').text}",
+          "phone" => menupg.css('li.phonenew').text.gsub(/[\\rn\s]/, "")
+          }
+
+        valid_restaurants << restaurant        
       end
     end
     valid_restaurants
   end
 
-      #name = menupg.css('div h1.title1respage').text
       
-      #phone = menupg.css('li.phonenew').text.gsub(/[\\rn\s]/, "")
-      #address = menupg.css('span.addr').text
-      #zip = menupg.css('span.city-zip').text
 
 
   def self.city_url

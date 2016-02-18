@@ -47,13 +47,18 @@ class Eatable::CLI
     print "=> "
     self.n_input = gets.strip.to_i
     k = self.neighborhoods.keys
-    puts "\nOk! Screening #{k[self.n_input - 1]} restaurant menus..."
-    puts "_" * 70, "\n"
+    puts "\nOk! Screening #{k[self.n_input - 1]} restaurant menus...   (This may take a few minutes)..."
+    puts "_" * 85, "\n"
   end
 
 
   def list_restaurants
-    puts Eatable::Scraper.restaurant_scrape(self.neighborhood_url)
+    valid_restaurants = Eatable::Scraper.restaurant_scrape(self.neighborhood_url)
+    puts "Here are some potential options!"
+    puts "-" * 31
+    valid_restaurants.each do |restaurant|
+      puts "\n#{restaurant["name"]}\n\t#{restaurant["address"]}\n\t#{restaurant["phone"]}"
+    end
   end
 
 
