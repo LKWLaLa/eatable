@@ -4,7 +4,7 @@ require 'pry'
 
 class Eatable::Scraper
 
-  NUTS = ["nut", "almond", "cashew", "macadamia", "pecan", "pigñolia", "pistachio", "pralines", "pesto", "filbert"]
+  NUTS = ["coconut", "chestnut", "hazelnut", "pinenut", "pinenuts", "nutella", "walnut", "peanut", "nuts", "nut", "almond", "cashew", "macadamia", "pecan", "pigñolia", "pistachio", "pralines", "pesto", "filbert"]
   SHELL_FISH = []
   
 
@@ -41,11 +41,10 @@ class Eatable::Scraper
   def self.filter_menus(menus_array)
     valid_restaurants = []
 
-    menus_array[0..50].each do |menu|
-      "http://www.menupages.com/restaurants/levain-bakery/menu"
+    menus_array[0..100].each do |menu|
       menupg = Nokogiri::HTML(open(menu))
-      menu_body = (menupg.css('div #restaurant-menu').text.gsub(/\r\n/, "")).downcase
-      if !menu_body.include?('nut')
+      menu_body = (menupg.css('div #restaurant-menu').text.gsub(/\r\n/, "").gsub(/\u00A0/, "").gsub(",", " ")).downcase.split
+      if (menu_body & NUTS).empty? && menu_body.length > 5
         valid_restaurants << menupg.css('div h1.title1respage').text
       end
     end
