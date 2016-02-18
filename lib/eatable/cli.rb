@@ -53,7 +53,6 @@ class Eatable::CLI
 
 
   def list_restaurants
-    binding.pry
     puts Eatable::Scraper.restaurant_scrape(self.neighborhood_url)
   end
 

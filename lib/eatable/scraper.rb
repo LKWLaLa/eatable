@@ -4,7 +4,7 @@ require 'pry'
 
 class Eatable::Scraper
 
-  NUTS = ["coconut", "chestnut", "hazelnut", "pinenut", "pinenuts", "nutella", "walnut", "peanut", "nuts", "nut", "almond", "cashew", "macadamia", "pecan", "pigñolia", "pistachio", "pralines", "pesto", "filbert"]
+  NUTS = ["coconut", "chestnut", "chestnuts", "hazelnut", "hazelnuts", "pinenut", "pinenuts", "nutella", "walnut", "walnuts", "peanut", "peanuts", "nuts", "nut", "almond", "almonds", "cashew", "cashews", "macadamia", "pecan", "pecans", "pigñolia", "pistachio", "pistachios", "praline", "pralines", "pesto", "filbert", "thai"]
   SHELL_FISH = []
   
 
@@ -43,7 +43,7 @@ class Eatable::Scraper
 
     menus_array[0..100].each do |menu|
       menupg = Nokogiri::HTML(open(menu))
-      menu_body = (menupg.css('div #restaurant-menu').text.gsub(/\r\n/, "").gsub(/\u00A0/, "").gsub(",", " ")).downcase.split
+      menu_body = (menupg.css('div #restaurant-menu').text.gsub(/\r\n/, "").gsub(/\u00A0/, "").gsub(",", " ").gsub(".", " ")).downcase.split
       if (menu_body & NUTS).empty? && menu_body.length > 5
         valid_restaurants << menupg.css('div h1.title1respage').text
       end
