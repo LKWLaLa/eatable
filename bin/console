@@ -16,4 +16,4 @@ IRB.start
 
   
 
-Eatable::CLI.new.call
+
